@@ -7,7 +7,7 @@ Utility for renaming music files using their metadata
   - installed with `python -m pip install tinytag`
 
 # Usage
-- run with `python main.py {options}`
+- run with `python mren {options}`
 - `--help` display the help menu
 - `--dir` set working directory
   - by default, this is the directory you ran the command in
