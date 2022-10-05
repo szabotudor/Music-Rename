@@ -43,7 +43,6 @@ if "--help" in arg:
 # Replace the current working directory with a given directory
 if "--dir" in arg:
 	cwd = arg[arg.index("--dir") + 1]
-	print(cwd)
 
 
 # Add other extensions to the valid extension list
@@ -81,30 +80,29 @@ if "--format" in arg:
 # Set the list of files in the directory
 flist: list = []
 if cwd == "":
-	flist = os.listdir(os.getcwd())
-else:
-	flist = os.listdir(cwd)
+	cwd = os.getcwd()
+flist = os.listdir(cwd)
 
 
 # Actual rename of file
 for f in flist:
 	# Check if file has valid extension
 	if getExt(f) in extensions:
-		audio = tt.get(f)
+		audio = tt.get(cwd + f)
 		newfname: str = ""
 		# Add components of the format to the new file name
 		for comp in format:
 			if comp == "%ext%":
 				newfname += getExt(f)
 			elif comp[0] == '%':
-				if comp == "%track%" and int(getattr(audio, comp[1:-1])) <= 9:
+				if comp == "%track%" and int(getattr(audio, comp[1:-1])) <= 9 and getattr(audio, comp[1:-1])[0] != '0':
 					newfname += '0'
 				newfname += getattr(audio, comp[1:-1])
 			else:
 				newfname += comp
 		
 		# Rename the file
-		os.rename(f, newfname)
+		os.rename(cwd + f, cwd + newfname)
 		print(quoted(f), "->", quoted(newfname))
 	else:
 		# Specify skipped files due to invalid extension
