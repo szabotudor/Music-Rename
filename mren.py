@@ -95,17 +95,27 @@ for f in flist:
 			if comp == "%ext%":
 				newfname += getExt(f)
 			elif comp[0] == '%':
-				if comp == "%track%" and int(getattr(audio, comp[1:-1])) <= 9 and getattr(audio, comp[1:-1])[0] != '0':
-					newfname += '0'
-				newfname += getattr(audio, comp[1:-1])
+				if comp == "%track%":
+					if audio.track[0] in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrtsuvwxyz":
+						newfname += audio.track[0]
+						if int(audio.track[1:]) < 10:
+							newfname += '0'
+						newfname += audio.track[1:]
+					else:
+						newfname += getattr(audio, comp[1:-1])
+				else:
+					newfname += getattr(audio, comp[1:-1])
 			else:
 				newfname += comp
 		
 		# Rename the file
 		for c in "?/\\|{[]}\"';:<>*&^%$#@":
 			newfname = newfname.replace(c, '')
-		os.rename(cwd + f, cwd + newfname)
-		print(quoted(f), "->", quoted(newfname))
+		if (f != newfname):
+			os.rename(cwd + f, cwd + newfname)
+			print(quoted(f), "->", quoted(newfname))
+		else:
+			print(quoted(f), "-> skipped")
 	else:
 		# Specify skipped files due to invalid extension
 		print(quoted(f), "-> skipped")
