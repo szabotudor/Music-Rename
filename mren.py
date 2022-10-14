@@ -102,10 +102,8 @@ for f in flist:
 				newfname += comp
 		
 		# Rename the file
-		if '/' in newfname:
-			print("unsupported char in new file name:", newfname)
-			newfname = newfname.replace('/', '-')
-			print("replaced with:", newfname)
+		for c in "?/\\|{[]}\"';:<>*&^%$#@":
+			newfname = newfname.replace(c, '')
 		os.rename(cwd + f, cwd + newfname)
 		print(quoted(f), "->", quoted(newfname))
 	else:
